@@ -19,9 +19,7 @@ pipeline {
 
     stage('docker build') {
       steps {
-        sh '''
-        sudo docker build -t 192.168.219.60/k3s/bookinfo-productpage-v1-${currentBuild.number}:latest .
-        '''
+        sh "sudo docker build -t 192.168.219.60/k3s/bookinfo-productpage-v1-${currentBuild.number}:latest ."
       }
       post {
               failure {
@@ -35,9 +33,7 @@ pipeline {
 
     stage('docker push') {
       steps {
-        sh '''
-        sudo docker image push 192.168.219.60/k3s/bookinfo-productpage-v1-${currentBuild.number}:latest
-        '''
+        sh "sudo docker image push 192.168.219.60/k3s/bookinfo-productpage-v1-${currentBuild.number}:latest"
       }
       post {
               failure {

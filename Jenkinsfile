@@ -72,6 +72,7 @@ pipeline {
               sh "git config --global user.email 'test@test.com'"
               sh "git config --global user.name 'kimhj4270'"
               sh "git commit -m '[UPDATE] bookinfo ${currentBuild.number} image versioning'"
+              sh "git remote set-url origin https://$username:$password@github.com/kimhj4270/k3smanifest.git"
               sh "git push origin master"
             }
         }

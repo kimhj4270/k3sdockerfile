@@ -47,6 +47,29 @@ pipeline {
       }
     }
 
+    stage('K8S Manifest Update') {
+        steps {
+            git credentialsId: '{Credential ID}',
+                url: 'https://github.com/kimhj4270/k3smanifest.git',
+                branch: 'master'
+
+            sh "sed -i 's/bookinfo-productpage-v1:1.*\$/bookinfo-productpage-v1:1.${currentBuild.number}/g' bookinfo.yaml"
+            sh "git add bookinfo.yaml"
+            sh "git commit -m '[UPDATE] bookinfo ${currentBuild.number} image versioning'"
+            sshagent(credentials: ['{credential ID}']) {
+                sh "git remote set-url origin git@github.com:kimhj4270/k3smanifest.git"
+                sh "git push -u origin master"
+             }
+        }
+        post {
+                failure {
+                  echo 'K8S Manifest Update failure !'
+                }
+                success {
+                  echo 'K8S Manifest Update success !'
+                }
+        }
+    }
 
 
   }

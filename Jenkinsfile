@@ -54,7 +54,10 @@ pipeline {
                 branch: 'master'
 
             sh "sed -i 's/bookinfo-productpage-v1:1.*\$/bookinfo-productpage-v1:1.${currentBuild.number}/g' bookinfo.yaml"
+            sh "git init"
             sh "git add bookinfo.yaml"
+            sh "git config --global user.email 'test@test.com'"
+            sh "git config --global user.name 'kimhj4270'"
             sh "git commit -m '[UPDATE] bookinfo ${currentBuild.number} image versioning'"
             sh "git push origin master"
         }

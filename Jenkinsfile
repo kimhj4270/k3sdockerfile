@@ -19,7 +19,7 @@ pipeline {
 
     stage('docker build') {
       steps {
-        sh "sudo docker build -t 192.168.219.60/k3s/bookinfo-productpage-v1-${currentBuild.number}:latest ."
+        sh "sudo docker build -t 192.168.219.60/k3s/bookinfo-productpage-v1:1.${currentBuild.number} ."
       }
       post {
               failure {
@@ -33,16 +33,16 @@ pipeline {
 
     stage('docker push') {
       steps {
-        sh "sudo docker image push 192.168.219.60/k3s/bookinfo-productpage-v1-${currentBuild.number}:latest"
+        sh "sudo docker image push 192.168.219.60/k3s/bookinfo-productpage-v1:1.${currentBuild.number}"
       }
       post {
               failure {
                 echo 'Docker Image Push failure !'
-                sh "docker rmi 192.168.219.60/k3s/bookinfo-productpage-v1-${currentBuild.number}:latest"
+                sh "docker rmi 192.168.219.60/k3s/bookinfo-productpage-v1:1.${currentBuild.number}"
               }
               success {
                 echo 'Docker image push success !'
-                sh "docker rmi 192.168.219.60/k3s/bookinfo-productpage-v1-${currentBuild.number}:latest"
+                sh "docker rmi 192.168.219.60/k3s/bookinfo-productpage-v1:1.${currentBuild.number}"
               }
       }
     }

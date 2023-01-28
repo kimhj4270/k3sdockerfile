@@ -52,14 +52,15 @@ pipeline {
             git credentialsId: '{Credential ID}',
                 url: 'https://github.com/kimhj4270/k3smanifest.git',
                 branch: 'master'
-
-            sh "sed -i 's/bookinfo-productpage-v1:1.*\$/bookinfo-productpage-v1:1.${currentBuild.number}/g' bookinfo.yaml"
-            sh "git init"
-            sh "git add bookinfo.yaml"
-            sh "git config --global user.email 'test@test.com'"
-            sh "git config --global user.name 'kimhj4270'"
-            sh "git commit -m '[UPDATE] bookinfo ${currentBuild.number} image versioning'"
-            sh "git push origin master"
+            withCredentials([usernamePassword(credentialsId: 'e55b462c-f3af-4e3a-867e-f1c69e909010', passwordVariable: 'password', usernameVariable: 'username')]) {
+              sh "sed -i 's/bookinfo-productpage-v1:1.*\$/bookinfo-productpage-v1:1.${currentBuild.number}/g' bookinfo.yaml"
+              sh "git init"
+              sh "git add bookinfo.yaml"
+              sh "git config --global user.email 'test@test.com'"
+              sh "git config --global user.name 'kimhj4270'"
+              sh "git commit -m '[UPDATE] bookinfo ${currentBuild.number} image versioning'"
+              sh "git push origin master"
+            }
         }
         post {
                 failure {

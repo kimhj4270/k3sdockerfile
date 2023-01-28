@@ -47,11 +47,24 @@ pipeline {
       }
     }
 
-    stage('K8S Manifest Update') {
+    stage('K8S Manifest Repository change') {
         steps {
             git credentialsId: '{Credential ID}',
                 url: 'https://github.com/kimhj4270/k3smanifest.git',
                 branch: 'master'
+        }
+        post {
+                failure {
+                  echo 'K8S Repository change failure !'
+                }
+                success {
+                  echo 'K8S Repository change success !'
+                }
+        }
+    }
+
+    stage('K8S Manifest Update') {
+        steps {
             withCredentials([usernamePassword(credentialsId: 'e55b462c-f3af-4e3a-867e-f1c69e909010', passwordVariable: 'password', usernameVariable: 'username')]) {
               sh "sed -i 's/bookinfo-productpage-v1:1.*\$/bookinfo-productpage-v1:1.${currentBuild.number}/g' bookinfo.yaml"
               sh "git init"
@@ -71,7 +84,6 @@ pipeline {
                 }
         }
     }
-
 
   }
 }
